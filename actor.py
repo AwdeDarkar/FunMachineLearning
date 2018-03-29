@@ -1,5 +1,4 @@
 import math
-import graphics
 from rules import *
 
 class Actor:
@@ -108,8 +107,7 @@ class World:
         vel[1] = projectile_speed*math.sin(heading)
         proj = Projectile(aid, pos, vel, fire_power, heading)
         self.projectiles.append(proj)
-        proj = graphics.ProjectileSprite(proj, self.display.screen)
-        self.display.projectile_spts.append(proj)
+        self.g_proj(proj)
         
 
     def update(self, dt):

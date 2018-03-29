@@ -24,11 +24,11 @@ RULES = {
         "position_radius" : 100,
         "friction" : 5,
         "floating_point_tolerance" : 2**-16,
-        "starting_actors" : 5
+        "starting_actors" : 3
     },
     "GRAPHICS" :
     {
-        "actor_sprite_url" : "./assets/actor.png",
+        "actor_sprite_url" : "./actor.png",
         "background_color" : '0xfefefa'
     },
     "CONSOLE":
@@ -40,6 +40,11 @@ RULES = {
         "line_length" : 20,
         "buffer_length" : 6,
         "color" : '0x000000'
+    },
+    "TOURNAMENT":
+    {
+        "batch_size" : 10,
+        "max_duration" : 10
     }
 }
 

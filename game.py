@@ -17,7 +17,12 @@ try:
     console.cprint("Starting")
     world = actor.World(console.cprint, console.cset, RULES)
     display = graphics.Display(RULES["GRAPHICS"], world, console)
-    world.display = display
+
+    def graphics_create_projectile(projectile):
+        p = graphics.ProjectileSprite(projectile, display.screen)
+        display.projectile_spts.append(p)
+    
+    world.g_proj = graphics_create_projectile
     controllers = [ controller.Controller(a) for a in world.actors[1:] ]
     controllers.append(player_controller.PlayerController(world.actors[0]))
 except:
