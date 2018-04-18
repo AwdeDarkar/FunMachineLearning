@@ -7,6 +7,7 @@ import controller
 import console
 import player_controller #wrap this stuff up probably
 import basic_net_controller
+from ai_controllers import *
 import sys
 import traceback
 import time
@@ -24,8 +25,9 @@ try:
         display.projectile_spts.append(p)
     
     world.g_proj = graphics_create_projectile
-    controllers = [ basic_net_controller.genRandController([8,5,8], a) for a in world.actors[1:] ]
-    controllers.append(player_controller.PlayerController(world.actors[0]))
+    controllers = [ DodgeAimBot(a) for a in world.actors[1:] ]
+    #controllers.append(player_controller.PlayerController(world.actors[0]))
+    controllers.append( ConserveBot(world.actors[0]))
 except:
     traceback.print_exc()
     running = False

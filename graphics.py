@@ -29,7 +29,8 @@ class Display:
                 actor_sprite.draw(self.screen)
 
         for projectile_sprite in self.projectile_spts:
-            projectile_sprite.draw(self.screen)
+            if(projectile_sprite.projectile.pid in self.world.plive):
+                projectile_sprite.draw(self.screen)
 
         if(self.console): self.console.draw(self.screen)
         pygame.display.flip()

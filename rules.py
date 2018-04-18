@@ -24,7 +24,8 @@ RULES = {
         "position_radius" : 100,
         "friction" : 5,
         "floating_point_tolerance" : 2**-16,
-        "starting_actors" : 3
+        "starting_actors" : 3,
+        "projectile_timetolive" : 8
     },
     "GRAPHICS" :
     {
@@ -61,8 +62,20 @@ def norm(v):
 def diff(w,v):
     return [ w[i] - v[i] for i in range(0,len(w)) ]
 
+def dist(x,y):
+    return norm(diff(x,y))
+
+def vsum(w,v):
+    return [ w[0] + v[0], w[1] + v[1] ]
+
 def arg(v):
     return 0
+
+def normalize(v):
+    n = norm(v)
+    if(n == 0):
+        return [0,0]
+    return [ v[0]/norm(v), v[1]/norm(v) ]
 
 def dot(w,v):
     return w[0]*w[1] + v[0]*v[1]
@@ -70,6 +83,8 @@ def dot(w,v):
 def det(w,v):
     return w[0]*v[1] - w[1]*v[0]
 
+def scale(v, a):
+    return [a*v[0], a*v[1]]
 def toDeg(rad):
     return (rad/(2*PI))*360
 

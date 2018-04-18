@@ -1,4 +1,5 @@
 import math
+import random
 from rules import *
 
 class Actor:
@@ -63,9 +64,11 @@ class Actor:
         wrules["handle_bounds"](self, self.pos)
         
 class Projectile:
-    def __init__(self, aid, pos, vel, power, heading):
+    def __init__(self, aid, pos, vel, power, heading, ttl=10):
         self.aid = aid
+        self.pid = aid*1000+random.randint(0,999)
         self.pos = pos
+        self.ttl = ttl
         self.heading = heading
         self.vel = vel
         self.power = power
@@ -73,6 +76,7 @@ class Projectile:
     def update(self, dt, wrules):
         self.pos[0] += self.vel[0]
         self.pos[1] += self.vel[1]
+        self.ttl -= dt
         wrules["handle_bounds"](self, self.pos)
 
 def calculatePositions(num, rad, center):
@@ -93,6 +97,7 @@ class World:
         self.cprint = cprint
         self.cset = cset
         self.killlist = []
+        self.plive = []
         self.display = None
 
         actor_pos = calculatePositions(self.wrules["starting_actors"],
@@ -105,8 +110,9 @@ class World:
     def create_projectile(self, aid, pos, vel, heading, fire_power, projectile_speed):
         vel[0] = projectile_speed*math.cos(heading)
         vel[1] = projectile_speed*math.sin(heading)
-        proj = Projectile(aid, pos, vel, fire_power, heading)
+        proj = Projectile(aid, pos, vel, fire_power, heading, self.wrules["projectile_timetolive"])
         self.projectiles.append(proj)
+        self.plive.append(proj.pid)
         self.g_proj(proj)
         
 
@@ -118,9 +124,13 @@ class World:
         delete_list_act = []
         for projectile in self.projectiles:
             projectile.update(dt, self.wrules)
+            if(projectile.ttl < 0):
+                self.plive.remove(projectile.pid)
+                delete_list_prj.append(projectile)
             for actor in self.actors:
                 if(actor.aid != projectile.aid and norm(diff(projectile.pos, actor.pos)) < actor.hit_radius):
                     delete_list_prj.append(projectile)
+                    self.plive.remove(projectile.pid)
                     actor.hp -= projectile.power
                     if(actor.hp <= 0):
                         delete_list_act.append(actor)

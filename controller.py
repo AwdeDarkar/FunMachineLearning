@@ -19,6 +19,9 @@ class Controller:
         self.actor.heading = h
         return h
 
+    def push(self, event):
+        pass
+
     def pull(self):
         a = 0 #No-op
 
