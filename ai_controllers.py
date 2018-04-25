@@ -1,9 +1,9 @@
 from controller import Controller
 import math
+import random
 from rules import *
 
 class AimBot(Controller):
-
     def __init__(self, actor):
         Controller.__init__(self, actor)
         self.actor = actor
@@ -86,3 +86,22 @@ class ConserveBot(DodgeAimBot):
         self.control = normalize(self.control)
         self.aimpos = self.target
         self.firing = (self.actor.eng > self.actor.fire_power*2)
+
+class VolleyBot(DodgeBot):
+    def __init__(self, actor):
+        DodgeBot.__init__(self, actor)
+        self.volley = False
+
+    def pull(self):
+        if(self.volley):
+            if(self.actor.eng < 1):
+                self.volley = False
+                self.firing = False
+            else:
+                self.control = normalize(self.control)
+                self.firing = True
+                self.aimpos = [random.randint(0, 1000), random.randint(0, 1000)]
+        else:
+            self.control = normalize(self.control)
+            if(self.actor.eng > 20 and random.random() < 0.05):
+                self.volley = True

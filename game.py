@@ -26,8 +26,11 @@ try:
     
     world.g_proj = graphics_create_projectile
     controllers = [ DodgeAimBot(a) for a in world.actors[1:] ]
+    #controllers = []
     #controllers.append(player_controller.PlayerController(world.actors[0]))
-    controllers.append( ConserveBot(world.actors[0]))
+    controllers.append(MobileBot(world.actors[0]))
+    
+    #controllers.append( VolleyBot(world.actors[0]) )
 except:
     traceback.print_exc()
     running = False

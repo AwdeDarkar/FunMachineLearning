@@ -36,7 +36,7 @@ class Actor:
     
     def set_move(self, control): #control can be -1, 0, or 1
         wt = norm(control)
-        if(wt != 0 and self.handle_cost(self.move_cost)):
+        if(wt != 0 and self.handle_cost(self.move_cost*wt)):
             self.acc[0] = control[0]*self.move_power/wt
             self.acc[1] = control[1]*self.move_power/wt
         else:
@@ -115,7 +115,9 @@ class World:
         self.plive.append(proj.pid)
         self.g_proj(proj)
         
-
+    def avgHP(self):
+        return sum([ actor.hp for actor in self.actors ])/len(self.actors)
+    
     def update(self, dt):
         for actor in self.actors:
             actor.update(dt, self, self.wrules)

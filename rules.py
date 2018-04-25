@@ -24,7 +24,7 @@ RULES = {
         "position_radius" : 100,
         "friction" : 5,
         "floating_point_tolerance" : 2**-16,
-        "starting_actors" : 3,
+        "starting_actors" : 2,
         "projectile_timetolive" : 8
     },
     "GRAPHICS" :
@@ -85,6 +85,7 @@ def det(w,v):
 
 def scale(v, a):
     return [a*v[0], a*v[1]]
+
 def toDeg(rad):
     return (rad/(2*PI))*360
 

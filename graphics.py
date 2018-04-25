@@ -1,5 +1,6 @@
 import sys, pygame
 from pygame import Color
+import colorsys
 import rules
 from rules import *
 
@@ -18,7 +19,9 @@ class Display:
         
         self.sprite_actor = pygame.image.load(self.grules["actor_sprite_url"])
         self.sprite_actor = self.sprite_actor.convert_alpha()
-        self.actor_spts = [ ActorSprite(actor, len(world.actors), self.sprite_actor, self.screen) for actor in world.actors ]
+        colors = calculateColors(len(world.actors))
+        self.actor_spts = [ ActorSprite(actor, len(world.actors), self.sprite_actor,
+                                        self.screen, colors[actor.aid], 16) for actor in world.actors ]
         self.projectile_spts = []
         
     def update(self):
@@ -36,15 +39,34 @@ class Display:
         pygame.display.flip()
 
 
+def calculateColors(num):
+    colors = []
+    for i in range(0, num):
+        colors.append( toInt(colorsys.hsv_to_rgb(i/num, 0.8, 0.8)) )
+    return colors
+
+def toInt(rgb):
+    r, g, b = rgb
+    v = 0
+    v += int(r*255)
+    v = v << 8
+    v += int(g*255)
+    v = v << 8
+    v += int(b*255)
+    return v
+
 class ActorSprite:
-    def __init__(self, actor, num_actors, sprite, screen):
+    def __init__(self, actor, num_actors, sprite, screen, color, radius):
         self.actor = actor
         self.sprite = sprite.copy()
         screen.blit(self.sprite, self.actor.pos)
+        self.color = color
+        self.radius = radius
 
     def draw(self, surface):
         sprite = pygame.transform.rotate(self.sprite, toDeg(-self.actor.heading))
-        surface.blit(sprite, [ x - 32 for x in self.actor.pos ])
+        pygame.draw.circle(surface, self.color, snap(self.actor.pos), self.radius)
+        surface.blit(sprite, [ x - self.radius*2 for x in self.actor.pos ])
 
 class ProjectileSprite:
     def __init__(self, projectile, screen):
